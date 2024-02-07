@@ -1,7 +1,9 @@
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Card, Checkbox, Col, Flex, Form, Input, Row, Typography } from 'antd';
-import Head from 'next/head';
+import { Button, Card, Col, Flex, Form, Input, Row, message } from 'antd';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { CSSProperties } from 'react';
+import { userLogin } from './api/userLogin';
 type FieldType = {
   email?: string;
   password?: string;
@@ -15,13 +17,29 @@ const LoginStyle: CSSProperties = {
   borderRadius: "18px",
 }
 
+const BtnStyle: CSSProperties = {
+  width: "100%",
+}
+const LinkStyle: CSSProperties = {
+  float: "right", fontSize: 14
+}
+
 
 
 export default function Home() {
-  const { Title, Text, Link } = Typography;
-
-  const onFinish = (values: any) => {
+  const router = useRouter()
+  const onFinish = async (values: any) => {
     console.log('Success:', values);
+
+    const result = await userLogin(values)
+    if (result.status === 200) {
+      // window.location.href = "/home"
+      message.success('Login Successfully', 200);
+      router.push('/Home')
+    } else {
+      message.error(result?.data?.message, 200);
+    }
+
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -31,12 +49,6 @@ export default function Home() {
 
   return (
     <>
-      <Head>
-        <title>Monitoring App</title>
-        <meta name="description" content="Monitoring App for Monitoring Data Flow, Server issues and Server related information" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <main className='App'>
         <Row justify={"center"} style={LoginStyle} align={"middle"}>
           <Col span={8}>
@@ -46,50 +58,36 @@ export default function Home() {
                   name="basic"
                   labelCol={{ span: 8 }}
                   className="login-form"
-                  // wrapperCol={{ span: 16 }}
                   style={{ maxWidth: 600 }}
-                  initialValues={{ remember: true }}
                   onFinish={onFinish}
                   onFinishFailed={onFinishFailed}
                   autoComplete="off"
                 >
                   <Form.Item<FieldType>
                     name="email"
-                    rules={[{ required: true, message: 'Please input your email!' }]}
+                    rules={[{ required: true, type: "email", message: 'Please input your email!' }]}
                   >
                     <Input placeholder='email' prefix={<MailOutlined />} />
                   </Form.Item>
 
-                  <Form.Item<FieldType>
-                    name="password"
-                    rules={[{ required: true, message: 'Please input your password!' }]}
-                  >
-                    <Input.Password placeholder='Password' prefix={<LockOutlined />} />
-                  </Form.Item>
-
-                  <Form.Item
-
-                  >
+                  <Form.Item>
                     <Form.Item<FieldType>
-                      name="remember"
-                      valuePropName="checked"
-                      wrapperCol={{ offset: 0, span: 16 }}
-                      noStyle
+                      name="password"
+                      rules={[{ required: true, message: 'Please input your password!' }]}
+                      style={{ marginBottom: 0 }}
                     >
-                      <Checkbox>Remember me</Checkbox>
-
-                      <Link style={{ float: "right" }} href="">
-                        Forgot password
-                      </Link>
+                      <Input.Password placeholder='Password' prefix={<LockOutlined />} />
                     </Form.Item>
+                    <Link style={LinkStyle} href="">
+                      Forgot password ?
+                    </Link>
                   </Form.Item>
-
-
-                  <Flex justify='center' >
-                    <Form.Item >
-                      <Button type="primary" htmlType="submit">
+                  <Flex justify='center'>
+                    <Form.Item style={BtnStyle}>
+                      <Button block type="primary" htmlType="submit">
                         Login
                       </Button>
+                      Or <Link href={'/register'} >Register Now!</Link>
                     </Form.Item>
                   </Flex>
                 </Form>
