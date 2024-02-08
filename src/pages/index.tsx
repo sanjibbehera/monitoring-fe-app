@@ -29,15 +29,13 @@ const LinkStyle: CSSProperties = {
 export default function Home() {
   const router = useRouter()
   const onFinish = async (values: any) => {
-    console.log('Success:', values);
-
     const result = await userLogin(values)
     if (result.status === 200) {
       // window.location.href = "/home"
-      message.success('Login Successfully', 200);
+      message.success('Login Successfully');
       router.push('/Home')
     } else {
-      message.error(result?.data?.message, 200);
+      message.error(result?.data?.message);
     }
 
   };
@@ -45,10 +43,12 @@ export default function Home() {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
+  const [messageApi, contextHolder] = message.useMessage();
 
 
   return (
     <>
+      {contextHolder}
       <main className='App'>
         <Row justify={"center"} style={LoginStyle} align={"middle"}>
           <Col span={8}>
