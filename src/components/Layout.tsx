@@ -36,19 +36,21 @@ const layoutStyle = {
 
 function Layout({ children }: any) {
     return (
-        <Flex gap="middle" wrap="wrap">
-            <AntLayout style={layoutStyle} hasSider>
-                <Sider theme='light' width="15%" trigger={null} style={siderStyle}>
-                    <Sidebar />
-                </Sider>
-                <AntLayout style={{ marginLeft: 200 }}>
-                    <Header style={headerStyle}>
-                        <CustomHeader />
-                    </Header>
-                    <Content style={contentStyle}><main>{children}</main></Content>
+        <div className='App'>
+            <Flex gap="middle" wrap="wrap">
+                <AntLayout style={layoutStyle} hasSider>
+                    <Sider theme='light' trigger={null} style={siderStyle}>
+                        <Sidebar />
+                    </Sider>
+                    <AntLayout style={{ marginLeft: 190 }}>
+                        <Header style={headerStyle}>
+                            <CustomHeader />
+                        </Header>
+                        <Content style={contentStyle}><main>{children}</main></Content>
+                    </AntLayout>
                 </AntLayout>
-            </AntLayout>
-        </Flex>
+            </Flex>
+        </div>
     )
 }
 

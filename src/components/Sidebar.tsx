@@ -32,7 +32,7 @@ export default function Sidebar() {
             <Menu
                 mode='inline'
                 items={items}
-
+                defaultSelectedKeys={["1"]}
             />
         </>
     )
