@@ -1,7 +1,9 @@
 import { ConfigProvider } from 'antd';
 import type { AppProps } from 'next/app';
 
+import { store } from '@/store/store';
 import Head from 'next/head';
+import { Provider } from 'react-redux';
 import theme from '../theme/themeConfig';
 
 const App = ({ Component, pageProps }: AppProps) => (
@@ -12,9 +14,11 @@ const App = ({ Component, pageProps }: AppProps) => (
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="icon" href="/favicon.ico" />
     </Head>
-    <ConfigProvider theme={theme}>
-      <Component {...pageProps} />
-    </ConfigProvider>
+    <Provider store={store}>
+      <ConfigProvider theme={theme}>
+        <Component {...pageProps} />
+      </ConfigProvider>
+    </Provider>
   </>
 );
 

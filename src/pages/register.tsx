@@ -1,8 +1,13 @@
+
+import { RootState } from '@/store/reducers/rootReducers';
+import { isAuthenticated } from '@/utils/auth';
 import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Flex, Form, Input, Row, Typography, message } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
-import { CSSProperties } from 'react';
+import { useRouter } from 'next/router';
+import { CSSProperties, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import AwsIcon from '../../public/aws.svg';
 import { userRegister } from './api/userLogin';
 
@@ -33,6 +38,17 @@ const LinkStyle: CSSProperties = {
 
 export default function Register() {
     const { Text } = Typography;
+    const router = useRouter();
+    const user = useSelector((state: RootState) => state.user);
+
+    useEffect(() => {
+        // If user is already authenticated, redirect to Dashboard
+        const token = typeof window !== 'undefined' && localStorage.getItem('token') || ''
+        if (isAuthenticated(user) || token !== '') {
+            router.replace('/dashboard');
+        }
+    }, [user, router]);
+
     const onFinish = async (values: any) => {
         if (values.password !== values.confirmPassword) {
             message.error("Password does not match!", 200);

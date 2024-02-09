@@ -1,8 +1,13 @@
+import { RootState } from '@/store/reducers/rootReducers';
+import { setUser } from '@/store/slices/userSlices';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Flex, Form, Input, Row, message } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { CSSProperties } from 'react';
+import { CSSProperties, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+// import { redirectIfAuthenticated } from '../utils/auth';
+import { isAuthenticated } from '../utils/auth';
 import { userLogin } from './api/userLogin';
 type FieldType = {
   email?: string;
@@ -26,14 +31,29 @@ const LinkStyle: CSSProperties = {
 
 
 
-export default function Home() {
+export default function Login() {
   const router = useRouter()
+
+  const user = useSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    // If user is already authenticated, redirect to Dashboard
+    const token = typeof window !== 'undefined' && localStorage.getItem('token') || ''
+    if (isAuthenticated(user) || token !== '') {
+      router.replace('/dashboard');
+    } else {
+      console.log('Empty');
+    }
+  }, [user, router]);
+
+  const dispatch = useDispatch();
   const onFinish = async (values: any) => {
     const result = await userLogin(values)
     if (result.status === 200) {
-      // window.location.href = "/home"
+      dispatch(setUser(result.data));
+      localStorage.setItem('token', result?.data?.tokens?.access?.token)
       message.success('Login Successfully');
-      router.push('/Home')
+      router.push('/dashboard')
     } else {
       message.error(result?.data?.message);
     }
@@ -99,3 +119,4 @@ export default function Home() {
     </>
   )
 }
+

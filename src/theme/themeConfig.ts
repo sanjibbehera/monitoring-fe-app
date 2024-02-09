@@ -8,7 +8,10 @@ const theme: ThemeConfig = {
   },
   components: {
     Form: {
-      fontSize:14
+      fontSize: 14
+    },
+    Dropdown: {
+      colorTextBase: "#88888"
     }
   }
 };

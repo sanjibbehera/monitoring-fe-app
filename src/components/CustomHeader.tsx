@@ -1,5 +1,5 @@
 import { CodepenCircleOutlined, SettingFilled } from '@ant-design/icons';
-import { Menu, MenuProps } from 'antd';
+import { Dropdown, MenuProps, Space } from 'antd';
 
 const items: MenuProps['items'] = [
     {
@@ -17,11 +17,16 @@ const items: MenuProps['items'] = [
 
 function CustomHeader() {
     return (
-        <Menu
-            mode='horizontal'
-            items={items}
-            style={{ float: 'right', width: '250px' }}
-        />
+        <Space style={{ float: "right" }}>
+            <Dropdown menu={{ items }} trigger={['click']} placement='bottom' >
+                <a onClick={(e) => e.preventDefault()}>
+                    <Space>
+                        <CodepenCircleOutlined />
+                        Welcome User!
+                    </Space>
+                </a>
+            </Dropdown>
+        </Space>
     )
 }
 

@@ -5,7 +5,7 @@ import { CSSProperties } from 'react';
 
 const divStyle: CSSProperties = { paddingInline: 15, paddingTop: 10 }
 const thumbIconStyle: CSSProperties = { fontSize: 40, color: '#0021F5', backgroundColor: '#C0E1FF', padding: 15, borderRadius: 15 }
-function Home() {
+function Dashboard() {
 
     const { Text, Title } = Typography
 
@@ -110,4 +110,4 @@ function Home() {
     )
 }
 
-export default Home
+export default Dashboard
