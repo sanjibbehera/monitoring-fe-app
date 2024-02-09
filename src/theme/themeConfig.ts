@@ -11,8 +11,8 @@ const theme: ThemeConfig = {
       fontSize: 14
     },
     Dropdown: {
-      colorTextBase: "#88888"
-    }
+      colorText: "#000",
+    },
   }
 };
 

@@ -1,7 +1,9 @@
 import { Layout as AntLayout, Flex } from 'antd';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 import CustomHeader from './CustomHeader';
 import Sidebar from './Sidebar';
+
 
 const { Header, Sider, Content } = AntLayout;
 
@@ -35,6 +37,14 @@ const layoutStyle = {
 
 
 function Layout({ children }: any) {
+    const router = useRouter();
+    useEffect(() => {
+        // If user is already authenticated, redirect to Dashboard
+        const token = typeof window !== 'undefined' && localStorage.getItem('token') || ''
+        if (token === '') {
+            router.push('/')
+        }
+    }, [router]);
     return (
         <div className='App'>
             <Flex gap="middle" wrap="wrap">
