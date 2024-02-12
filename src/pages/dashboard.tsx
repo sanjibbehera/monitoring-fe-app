@@ -18,12 +18,12 @@ const cardContainerStyle = {
 
 const cardImageStyle = {
     ...cardContainerStyle,
-    backgroundColor: "rgba(153, 189, 10, 0.4)",
+    backgroundColor: Color.GRADIENT_ORANGE,
 };
 
 const cardImageContainerStyle = {
     ...cardContainerStyle,
-    backgroundColor: "rgba(174, 178, 255, 0.47)",
+    backgroundColor: Color.GRADIENT_LIGHT_BLUE,
 };
 
 const cardTextStyle = {
@@ -49,7 +49,7 @@ const data = [
 
 function Dashboard() {
 
-    const { Text, Title } = Typography
+    const { Text } = Typography
 
     return (
         <Layout>
@@ -57,43 +57,19 @@ function Dashboard() {
                 <div style={divStyle}>
                     <Row gutter={16}>
                         <Col span={16}>
-                            <Flex justify='space-evenly' align='center' >
-                                <CustomCard
-                                    title="CPU"
-                                    color="#0021F5"
-                                    titleIcon={<GlobalOutlined />}
-                                    average={65}
-                                    percentage={10.08}
-                                    progressProps={{ percent: 50 }}
-                                    bgColor='#C0E1FF'
-                                />
-                                <CustomCard
-                                    title="CPU"
-                                    color="#99BD0A"
-                                    titleIcon={<GlobalOutlined />}
-                                    average={65}
-                                    percentage={10.08}
-                                    progressProps={{ percent: 50, strokeColor: '#99BD0A' }}
-                                    bgColor='rgba(153, 189, 10, 0.3)'
-                                />
-                                <CustomCard
-                                    title="CPU"
-                                    color="#0021F5"
-                                    titleIcon={<GlobalOutlined />}
-                                    average={65}
-                                    percentage={10.08}
-                                    progressProps={{ percent: 50 }}
-                                    bgColor='#C0E1FF'
-                                />
-                                <CustomCard
-                                    title="CPU"
-                                    color="#FF0046"
-                                    titleIcon={<GlobalOutlined />}
-                                    average={65}
-                                    percentage={10.08}
-                                    progressProps={{ percent: 50, strokeColor: '#FF0046' }}
-                                    bgColor='#FFDADA'
-                                />
+                            <Flex justify='space-evenly' align='center'>
+                                {[...Array(4)].map((_, index) => (
+                                    <CustomCard
+                                        key={index}
+                                        title={["CPU", "RAM", "DISK", "SERVICES"][index]}
+                                        color={[Color.PRIMARY_BLUE, Color.PRIMARY_ORANGE, Color.PRIMARY_BLUE, Color.PRIMARY_RED][index]}
+                                        titleIcon={<GlobalOutlined />}
+                                        average={65}
+                                        percentage={10.08}
+                                        progressProps={{ percent: 50, strokeColor: [Color.PRIMARY_BLUE, Color.PRIMARY_ORANGE, Color.PRIMARY_BLUE, Color.PRIMARY_RED][index] }}
+                                        bgColor={[Color.SECONDARY_BLUE, Color.GRADIENT_ORANGE, Color.SECONDARY_BLUE, Color.CREAM][index]}
+                                    />
+                                ))}
                             </Flex>
                             <Space style={{ marginTop: 10, marginBottom: 10 }}>
                                 <Card title="Cardss title" bordered={false}>
@@ -115,7 +91,7 @@ function Dashboard() {
                                                 online Participant
                                             </Text>
                                         </Flex>
-                                        <Progress style={{ width: "135px" }} strokeColor={"#99BD0A"} percent={50} showInfo={false} />
+                                        <Progress style={{ width: "135px" }} strokeColor={Color.PRIMARY_ORANGE} percent={50} showInfo={false} />
                                     </Space>
                                     <Space style={{ justifyContent: "space-between" }} size="small">
                                         <div style={cardImageContainerStyle}>
@@ -126,14 +102,14 @@ function Dashboard() {
                                             <Text style={cardTextStyle} type="secondary">
                                                 online Participant
                                             </Text>
-                                        </Flex>
+                                        </Flex >
                                         <Progress style={{ width: "135px" }} percent={50} showInfo={false} />
                                     </Space>
                                 </Flex>
                             </Card>
                             <Card style={{ background: "linear-gradient(#8F68FD, #420ADF)" }}>
                                 <Flex align='center' justify='space-between'>
-                                    <Progress strokeWidth={10} strokeColor={Color.BASIC_WHITE} trailColor='#8EBBFE' type="circle" size={"small"} percent={75} format={(percent) => <Text style={{ color: Color.BASIC_WHITE }} strong>{percent}</Text>} />
+                                    <Progress strokeWidth={10} strokeColor={Color.BASIC_WHITE} trailColor='#8EBBFE' type="circle" size={"small"} percent={75} format={(percent) => (<Text style={{ color: Color.BASIC_WHITE }} strong>{percent}</Text>)} />
                                     <Text style={{ color: Color.BASIC_WHITE }} strong>Storage <br /> Usage</Text> <Text style={{ color: Color.BASIC_WHITE }} strong>|</Text>
                                     <Text style={{ color: Color.BASIC_WHITE }} strong>21,21,32,314 <br /> online users </Text>
                                 </Flex>
@@ -145,18 +121,16 @@ function Dashboard() {
                                 <List
                                     dataSource={data.length > 1 ? data.slice(0, 2) : data}
                                     renderItem={(item, index) => (
-                                        <>
-                                            <List.Item key={index}>
-                                                <List.Item.Meta
-                                                    title={<Text style={{ color: Color.BASIC_WHITE }}>"10:31:44 from Indonesia"</Text>}
-                                                    description={<Text style={{ color: Color.BASIC_WHITE }}>"Sobatserver"</Text>}
-                                                />
-                                                <Button type='text'><ArrowRightOutlined style={{ color: Color.BASIC_WHITE }} /></Button>
-                                            </List.Item>
-                                        </>
+                                        <List.Item key={index}>
+                                            <List.Item.Meta
+                                                title={<Text style={{ color: Color.BASIC_WHITE }}>"10:31:44 from Indonesia"</Text>}
+                                                description={<Text style={{ color: Color.BASIC_WHITE }}>"Sobatserver"</Text>}
+                                            />
+                                            <Button type='text'><ArrowRightOutlined style={{ color: Color.BASIC_WHITE }} /></Button>
+                                        </List.Item>
                                     )}
                                 />
-                                {data.length > 1 && <Button type='text'>+more <ArrowRightOutlined /></Button>}
+                                {data.length > 1 && <Button size='small' style={{ color: Color.BASIC_WHITE }} type='text'>+more <ArrowRightOutlined /></Button>}
                             </Card>
                         </Col>
                     </Row>

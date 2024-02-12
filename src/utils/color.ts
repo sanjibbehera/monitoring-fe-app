@@ -1,3 +1,11 @@
 export const Color = {
-    BASIC_WHITE: "#fff"
+    BASIC_WHITE: "#fff",
+    GRADIENT_ORANGE: "rgba(153, 189, 10, 0.4)",
+    GRADIENT_LIGHT_BLUE: "rgba(174, 178, 255, 0.47)",
+    PRIMARY_BLUE: '#0021F5',
+    PRIMARY_ORANGE: '#99BD0A',
+    PRIMARY_RED: '#FF0046',
+    SECONDARY_BLUE: '#C0E1FF',
+    CREAM: '#FFDADA',
+    PURPLE: '#8F68FD'
 }
