@@ -47,16 +47,22 @@ export default function Login() {
   }, [user, router]);
 
   const dispatch = useDispatch();
+
   const onFinish = async (values: any) => {
-    const result = await userLogin(values)
-    if (result.status === 200) {
-      dispatch(setUser(result.data));
-      localStorage.setItem('token', result?.data?.tokens?.access?.token)
-      message.success('Login Successfully');
-      router.push('/dashboard')
-    } else {
-      message.error(result?.data?.message);
+    try {
+      const result = await userLogin(values)
+      if (result?.status === 200) {
+        dispatch(setUser(result.data));
+        localStorage.setItem('token', result?.data?.tokens?.access?.token)
+        message.success('Login Successfully');
+        router.push('/dashboard')
+      } else {
+        message.error(result?.data?.message || 'Server Error,Please try again later.');
+      }
+    } catch (error) {
+      throw (new Error('Server error: ' + error));
     }
+
 
   };
 

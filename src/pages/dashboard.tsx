@@ -4,33 +4,31 @@ import { Color } from '@/utils/color';
 import { ArrowRightOutlined, GlobalOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Flex, List, Progress, Row, Space, Typography } from 'antd';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { CSSProperties } from 'react';
 import SeverIcon from '../../public/Server.svg';
 import AlertFlesh from '../../public/alertPhishing.svg';
 import ServerRequestIcon from '../../public/serverRequest.svg';
-const divStyle: CSSProperties = { paddingInline: 15, paddingTop: 10 }
 
+
+
+const divStyle: CSSProperties = { paddingInline: 15, paddingTop: 10 }
 
 const cardContainerStyle = {
     padding: 15,
     borderRadius: 10,
 };
-
 const cardImageStyle = {
     ...cardContainerStyle,
     backgroundColor: Color.GRADIENT_ORANGE,
 };
-
 const cardImageContainerStyle = {
     ...cardContainerStyle,
     backgroundColor: Color.GRADIENT_LIGHT_BLUE,
 };
-
 const cardTextStyle = {
     fontSize: 14,
 };
-
-
 const data = [
     {
         title: 'Ant Design Title 1',
@@ -50,6 +48,7 @@ const data = [
 function Dashboard() {
 
     const { Text } = Typography
+    const route = useRouter()
 
     return (
         <Layout>
@@ -126,11 +125,11 @@ function Dashboard() {
                                                 title={<Text style={{ color: Color.BASIC_WHITE }}>"10:31:44 from Indonesia"</Text>}
                                                 description={<Text style={{ color: Color.BASIC_WHITE }}>"Sobatserver"</Text>}
                                             />
-                                            <Button type='text'><ArrowRightOutlined style={{ color: Color.BASIC_WHITE }} /></Button>
+                                            <Button onClick={() => route.push('/alerts')} type='text'><ArrowRightOutlined style={{ color: Color.BASIC_WHITE }} /></Button>
                                         </List.Item>
                                     )}
                                 />
-                                {data.length > 1 && <Button size='small' style={{ color: Color.BASIC_WHITE }} type='text'>+more <ArrowRightOutlined /></Button>}
+                                {data.length > 1 && <Button size='small' onClick={() => route.push('/alerts')} style={{ color: Color.BASIC_WHITE }} type='text'>+more <ArrowRightOutlined /></Button>}
                             </Card>
                         </Col>
                     </Row>
