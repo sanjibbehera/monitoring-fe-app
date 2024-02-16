@@ -1,13 +1,17 @@
 import { AlertFilled, HomeFilled, SafetyCertificateFilled } from '@ant-design/icons';
-import { Menu, MenuProps } from "antd";
+import { Menu, MenuProps, Typography } from "antd";
 import { useRouter } from 'next/router';
 
 
 const itemStyle = { flexGrow: 1, height: '100%', lineHeight: '25px', padding: "26px" };
 
 
+interface MenuThemeProps {
+    menuTheme?: any;
+}
 
-export default function Sidebar() {
+
+export default function Sidebar({ menuTheme }: MenuThemeProps) {
     const route = useRouter()
 
     const items: MenuProps['items'] = [
@@ -36,8 +40,9 @@ export default function Sidebar() {
 
     return (
         <>
-            <div >Company Logo</div>
+            <Typography.Title type='success' level={4}>Company Logo</Typography.Title>
             <Menu
+                theme={menuTheme}
                 mode='inline'
                 items={items}
                 defaultSelectedKeys={['/dashboard']}

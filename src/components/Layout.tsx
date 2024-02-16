@@ -7,12 +7,7 @@ import Sidebar from './Sidebar';
 
 const { Header, Sider, Content } = AntLayout;
 
-const headerStyle: React.CSSProperties = {
-    textAlign: 'center',
-    paddingInline: 48,
-    lineHeight: '64px',
-    backgroundColor: '#fff',
-};
+
 
 const contentStyle: React.CSSProperties = {
     backgroundColor: '#F1F2FB',
@@ -27,7 +22,7 @@ const siderStyle: React.CSSProperties = {
     position: 'fixed',
     left: 0,
     top: 0,
-    bottom: 0
+    bottom: 0,
 };
 
 const layoutStyle = {
@@ -38,6 +33,7 @@ const layoutStyle = {
 
 function Layout({ children }: any) {
     const router = useRouter();
+
     useEffect(() => {
         // If user is already authenticated, redirect to Dashboard
         const token = typeof window !== 'undefined' && localStorage.getItem('token') || ''
@@ -49,11 +45,11 @@ function Layout({ children }: any) {
         <div className='App'>
             <Flex gap="middle" wrap="wrap">
                 <AntLayout style={layoutStyle} hasSider>
-                    <Sider theme='light' trigger={null} style={siderStyle}>
-                        <Sidebar />
+                    <Sider theme='dark' trigger={null} style={siderStyle}>
+                        <Sidebar menuTheme={'dark'} />
                     </Sider>
                     <AntLayout style={{ marginLeft: 190 }}>
-                        <Header style={headerStyle}>
+                        <Header>
                             <CustomHeader />
                         </Header>
                         <Content style={contentStyle}><main>{children}</main></Content>

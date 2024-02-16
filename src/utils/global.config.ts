@@ -1,1 +1,1 @@
-export const LOCAL_BASE_URL = "http://localhost:8000/v1/auth/";
+export const LOCAL_BASE_URL = "http://localhost:8000/v1";

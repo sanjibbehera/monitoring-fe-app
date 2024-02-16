@@ -1,3 +1,4 @@
+import { Color } from '@/utils/color';
 import { CodepenCircleOutlined, LogoutOutlined, SettingFilled } from '@ant-design/icons';
 import { Button, Dropdown, MenuProps, Space, Typography } from 'antd';
 
@@ -25,9 +26,9 @@ function CustomHeader() {
             <Dropdown menu={{ items }} trigger={['click']} placement='bottom' >
                 <a onClick={(e) => e.preventDefault()}>
                     <Space>
-                        <Typography.Text strong > <CodepenCircleOutlined />
+                        <Typography.Text style={{ color: Color.BASIC_WHITE }} strong> <CodepenCircleOutlined />
                         </Typography.Text>
-                        <Typography.Text strong> Welcome User!
+                        <Typography.Text style={{ color: Color.BASIC_WHITE }} strong> Welcome User!
                         </Typography.Text>
                     </Space>
                 </a>

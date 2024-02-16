@@ -1,0 +1,9 @@
+<svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect width="25" height="25" fill="url(#pattern0)"/>
+<defs>
+<pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_1_38" transform="scale(0.01)"/>
+</pattern>
+<image id="image0_1_38" width="100" height="100" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAACQElEQVR4nO2dQW6DMBBFfYnuKlWjZtdL9BJcIqfIeXqfXKSp2U7lqJskApcAmo95T/IOEWZexthgIKWleb98JMs+2so2Y1g+VfZxrh5H2WZ8H6fV45AAIWIgRAyEiIEQMRAiBkLEQIgYCBEDIWIgRAyEiHH4fvm7FjXcyjZjvF0+K/s4Vo+jbDO2j/Iba8cBAADjHPJrsr6j9d01F+FcZVRu5Oym9V20DoQYQrztCikTuSntfuxNl+WDQkqupub3iX/C7eIAhPigkPpijceGkLxel4WQrHUOQUhGCOeQTIWk8Eqgy/L4ZCPE9ymEiaFrTQznwsTQB4WEgBBHiG2ky6JCMkLosjIVksIrgS7L9yOkthistsBskVHWz9fk47Cl2/UYlhVSX/D32DRuUAmMTmyFOLZ7+R0hCSF3UCFUSKLLGoEKoUISFbKNCjlPbLcPyzDK8hEhx8n5nQ1CXGr4jpCMkFVopdKbCcQaiaOZQKyROJoJxBqJo5lArJE4mgnEVOJgYig2MZz+w9wPsX8L4QZVC9eyqJACQnZwUjcq5HkQQoUkziHbqBAWypnSQrm58HyISw1OEJIRkmQbFeLxEhDi8YlHiMcnGyG+TyG8OMBXE8Ib5bJWhWz34mIrrUdICpeAEI9PPEI8PtkI8fgEI8Tjk4oQgURmISFMDH01IbxRLmtVSAhMDB0hFl0JyhXCJ486rU8eAQBsGD69KgYfJxYDIWIgRAyEiIEQMRAiBkLEQIgYCBEDIWIgRAyEpDn8Ala7SzShCrjCAAAAAElFTkSuQmCC"/>
+</defs>
+</svg>

@@ -3,8 +3,8 @@ import axios from "axios";
 
 
 type payloadLoginType = {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 }
 
 type payloadRegisterType = {
@@ -15,9 +15,9 @@ type payloadRegisterType = {
   accountId: string;
 }
 
-export const userLogin = async (payload:payloadLoginType) => {
+export const userLogin = async (payload: payloadLoginType) => {
   try {
-      const data = await axios.post(`${LOCAL_BASE_URL}/login`, payload);
+    const data = await axios.post(`${LOCAL_BASE_URL}/auth/login`, payload);
     return data;
   } catch (error: any) {
     return error?.response;
@@ -27,7 +27,7 @@ export const userLogin = async (payload:payloadLoginType) => {
 export const userRegister = async (payload: payloadRegisterType) => {
   delete payload?.confirmPassword;
   try {
-      const data = await axios.post(`${LOCAL_BASE_URL}/register`, payload);
+    const data = await axios.post(`${LOCAL_BASE_URL}/auth/register`, payload);
     return data;
   } catch (error: any) {
     return error?.response;
