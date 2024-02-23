@@ -1,6 +1,7 @@
 import { CustomCard } from "@/components/CustomCard";
 import Layout from "@/components/Layout";
 import { Color } from "@/utils/color";
+import { cardsList } from "@/utils/const";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -8,6 +9,7 @@ import {
   Col,
   Flex,
   List,
+  MenuProps,
   Progress,
   Row,
   Space,
@@ -16,10 +18,7 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { CSSProperties, useEffect, useState } from "react";
-import CPULogo from "../../public/Electronics.svg";
 import SeverIcon from "../../public/Server.svg";
-import RamLogo from "../../public/SystemTask.svg";
-import DiskLogo from "../../public/USBMemoryStick.svg";
 import AlertFlesh from "../../public/alertPhishing.svg";
 import ServerRequestIcon from "../../public/serverRequest.svg";
 import { dashboardData, getS3Data } from "./api/dashboard";
@@ -56,74 +55,61 @@ const data = [
   },
 ];
 
+
+const items: MenuProps['items'] = [
+  {
+    label: <a href="https://www.antgroup.com">1st menu item</a>,
+    key: '0',
+  },
+  {
+    label: <a href="https://www.aliyun.com">2nd menu item</a>,
+    key: '1',
+  },
+  {
+    type: 'divider',
+  },
+  {
+    label: '3rd menu item',
+    key: '3',
+  },
+];
+
 function Dashboard() {
   const { Text } = Typography;
   const route = useRouter();
   const [response, setResponse] = useState([]);
-  const [usageData, setUsageData] = useState([]);
-  const [avgUsageData, setAvgUsageData] = useState(0);
   const [cardsData, setCardsData] = useState([]);
-  const [average, setAverage] = useState(null);
+  const [extraCardData, setExtraCardData] = useState([]);
   useEffect(() => {
     const fetchCardItems = async () => {
       const result = await dashboardData();
       if (result !== null) {
+        setExtraCardData(result.data);
         const usageItems: any = {
           cpu: result?.data?.cpu?.pop(),
           disk: result?.data?.disk.pop(),
         };
 
-        const cardsItems: any = [
-          {
-            name: "CPU",
-            percentage: parseFloat(usageItems.cpu?.cpuData[0]?.Maximum).toFixed(
-              2
-            ),
-            color: Color.PRIMARY_BLUE,
-            icon: CPULogo,
-            average: parseFloat(result?.data?.average.toString()).toFixed(2),
+        const cardInfo = cardsList.map((item: any, idx: number) => {
+          return {
+            ...item,
+            percentage: idx === 0 ? parseFloat(usageItems.cpu?.cpuData[0]?.Maximum).toFixed(2) :
+              idx === 2 ? `${usageItems.disk?.size} GB` :
+                item.percentage,
+
+            average: idx === 0 ? parseFloat(result?.data?.average.toString()).toFixed(2) :
+              idx === 2 ? usageItems.disk?.size / 100 :
+                item.average,
+
             progressProps: {
-              percent: parseFloat(usageItems.cpu?.cpuData[0]?.Maximum).toFixed(
-                2
-              ),
-              strokeColor: Color.PRIMARY_BLUE,
+              percent: idx === 0 ? parseFloat(usageItems.cpu?.cpuData[0]?.Maximum).toFixed(2) :
+                idx === 2 ? usageItems.disk?.size :
+                  item.progressProps.percent,
+              strokeColor: item.progressProps.strokeColor,
             },
-            bgColor: Color.SECONDARY_BLUE,
-          },
-          {
-            name: "RAM",
-            percentage: 30,
-            color: Color.PRIMARY_ORANGE,
-            icon: RamLogo,
-            average: 27,
-            progressProps: { percent: 50, strokeColor: Color.PRIMARY_ORANGE },
-            bgColor: Color.GRADIENT_ORANGE,
-          },
-          {
-            name: "DISK",
-            // percentage: usageItems.disk?.size / 100
-            percentage: `${usageItems.disk?.size} GB`,
-            color: Color.PRIMARY_BLUE,
-            icon: DiskLogo,
-            average: usageItems.disk?.size / 100,
-            progressProps: {
-              percent: usageItems.disk?.size,
-              strokeColor: Color.PURPLE,
-            },
-            bgColor: Color.SECONDARY_BLUE,
-          },
-          {
-            name: "SERVICES",
-            percentage: 30,
-            color: Color.PRIMARY_RED,
-            icon: RamLogo,
-            average: 27,
-            progressProps: { percent: 50, strokeColor: Color.PRIMARY_RED },
-            bgColor: Color.CREAM,
-          },
-        ];
-        setCardsData(cardsItems);
-        setAverage(result.data.average);
+          };
+        });
+        setCardsData(cardInfo);
       }
     };
     fetchCardItems();
@@ -135,6 +121,40 @@ function Dashboard() {
         console.error(error);
       });
   }, []);
+
+  const generateCardMenu = (index: number) => {
+    // Customize the menu items based on the card's index
+    switch (index) {
+      case 0:
+        return {
+          items: [
+            {
+              label: <Typography.Text style={{ fontSize: 12 }} strong>CPU Details</Typography.Text>,
+              key: '0',
+            },
+            {
+              label: <Typography.Text style={{ fontSize: 12 }}>Account Id :{extraCardData?.cpu[0]?.accountId}</Typography.Text>,
+              key: '0',
+            }, {
+              label: <Typography.Text style={{ fontSize: 12 }}>Maximum :{parseFloat(extraCardData?.cpu[0]?.cpuData[index]?.Maximum).toPrecision(2)}%</Typography.Text>,
+              key: '1',
+            },
+            {
+              label: <Typography.Text style={{ fontSize: 12 }}>Date :{new Date(extraCardData?.cpu[0]?.cpuData[index]?.Timestamp).toLocaleDateString()}</Typography.Text>,
+              key: '2',
+            }
+          ]
+        };
+      // case 1:
+      //   return { items: [/* your data for index 1 */] };
+      // case 2:
+      //   return { items: [/* your data for index 2 */] };
+      // Add more cases as needed for other indices
+      default:
+        return null; // Return null if no menu is needed for other indices
+    }
+  };
+
   return (
     <Layout>
       <div>
@@ -160,6 +180,7 @@ function Dashboard() {
                       index
                     ) => (
                       <CustomCard
+                        cardMenu={generateCardMenu(index)}
                         key={index}
                         title={card.name}
                         color={card.color}
@@ -228,14 +249,14 @@ function Dashboard() {
                   (response || []).reduce<
                     Record<
                       string,
-                      { bucketName: string; totalSizeBytes: number }
+                      { bucketName: string; totalSizeGB: number }
                     >
                   >((buckets, item) => {
-                    const { bucketName, totalSizeBytes } = item;
+                    const { bucketName, totalSizeGB } = item;
                     if (!buckets[bucketName]) {
-                      buckets[bucketName] = { bucketName, totalSizeBytes };
+                      buckets[bucketName] = { bucketName, totalSizeGB };
                     } else {
-                      buckets[bucketName].totalSizeBytes += totalSizeBytes;
+                      buckets[bucketName].totalSizeGB += totalSizeGB;
                     }
                     return buckets;
                   }, {})
@@ -245,7 +266,7 @@ function Dashboard() {
                     key={bucket.bucketName}
                   >
                     <Text strong>{bucket.bucketName}</Text>
-                    <Text type="secondary">{bucket.totalSizeBytes} Bytes</Text>
+                    <Text type="secondary">{parseFloat(bucket.totalSizeGB.toString()).toPrecision(2)} GB</Text>
                   </Space>
                 ))}
               </Card>

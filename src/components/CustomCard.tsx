@@ -1,5 +1,5 @@
-import { ArrowUpOutlined } from "@ant-design/icons";
-import { Card, Flex, Progress, Space, Typography } from "antd";
+import { ArrowUpOutlined, EllipsisOutlined } from "@ant-design/icons";
+import { Button, Card, Dropdown, Flex, Progress, Space, Typography } from "antd";
 import Image from "next/image";
 
 interface CustomCarProps {
@@ -10,6 +10,8 @@ interface CustomCarProps {
     titleIcon: string;
     percentage: any;
     average: any;
+    cardMenu?: any;
+    index?: number;
 }
 const thumbIconStyle = {
     // fontSize: 40,
@@ -29,9 +31,14 @@ const { Text } = Typography;
 
 
 
-export const CustomCard = ({ title, color, bgColor, progressProps, titleIcon, percentage, average }: CustomCarProps) => (
-    
-    <Card style={{ width: "100%", marginInline: 5 }} bordered={false}>
+export const CustomCard = ({ title, color, bgColor, progressProps, titleIcon, percentage, average, cardMenu, index }: CustomCarProps) => (
+
+    <Card key={index} style={{ width: "100%", marginInline: 5 }} bordered={false}>
+        <div style={{ position: "absolute", right: 10, top: 10 }} >
+            {cardMenu && <Dropdown menu={cardMenu} trigger={['click']} >
+                <Button shape="circle" icon={<EllipsisOutlined />} />
+            </Dropdown>}
+        </div>
         <Flex vertical gap={3}>
             <Space size="middle">
                 <div style={coloredThumbIconStyle(color, bgColor)}>

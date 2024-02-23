@@ -45,11 +45,11 @@ function Layout({ children }: any) {
         <div className='App'>
             <Flex gap="middle" wrap="wrap">
                 <AntLayout style={layoutStyle} hasSider>
-                    <Sider theme='dark' trigger={null} style={siderStyle}>
-                        <Sidebar menuTheme={'dark'} />
+                    <Sider theme='light' trigger={null} style={siderStyle}>
+                        <Sidebar menuTheme={'light'} />
                     </Sider>
                     <AntLayout style={{ marginLeft: 190 }}>
-                        <Header>
+                        <Header style={{ backgroundColor: "#fff" }}>
                             <CustomHeader />
                         </Header>
                         <Content style={contentStyle}><main>{children}</main></Content>
