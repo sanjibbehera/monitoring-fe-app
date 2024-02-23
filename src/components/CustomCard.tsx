@@ -30,6 +30,7 @@ const { Text } = Typography;
 
 
 export const CustomCard = ({ title, color, bgColor, progressProps, titleIcon, percentage, average }: CustomCarProps) => (
+    
     <Card style={{ width: "100%", marginInline: 5 }} bordered={false}>
         <Flex vertical gap={3}>
             <Space size="middle">
@@ -38,7 +39,7 @@ export const CustomCard = ({ title, color, bgColor, progressProps, titleIcon, pe
                 </div>
             </Space>
             <Text>{title}</Text>
-            <Text strong>{percentage || `65`}% <ArrowUpOutlined /></Text>
+            <Text strong>{`${title === "DISK" ? percentage.replace('%', '') : `${percentage}%`} `}<ArrowUpOutlined /></Text>
             <Text>Avg +{average ? average : <>65</>}%</Text>
             <Progress {...progressProps} showInfo={false} />
         </Flex>
