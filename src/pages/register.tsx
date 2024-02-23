@@ -2,7 +2,7 @@
 import { RootState } from '@/store/reducers/rootReducers';
 import { isAuthenticated } from '@/utils/auth';
 import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Flex, Form, Input, Row, Typography, message } from 'antd';
+import { Button, Card, Col, Flex, Form, Input, Row, Select, Typography, message } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -18,6 +18,7 @@ type FieldType = {
     accountId?: string;
     role?: string;
     name: string;
+    region?: string;
 };
 
 
@@ -128,6 +129,13 @@ export default function Register() {
 
                                 >
                                     <Input placeholder='AWS Account Id' prefix={<Image alt='awsLogo' width={20} src={AwsIcon} />} />
+                                </Form.Item>
+                                <Form.Item<FieldType>
+                                    name="region"
+                                    rules={[{ required: false, message: 'Select Region' }]}
+
+                                >
+                                    <Select placeholder="Select Region" options={[{ value: 'ap-south-1', label: <span>ap-south-1</span> }]} />
                                 </Form.Item>
 
                                 <Flex justify='center'>

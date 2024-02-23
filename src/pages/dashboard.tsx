@@ -9,11 +9,10 @@ import {
   Col,
   Flex,
   List,
-  MenuProps,
   Progress,
   Row,
   Space,
-  Typography,
+  Typography
 } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -56,24 +55,6 @@ const data = [
 ];
 
 
-const items: MenuProps['items'] = [
-  {
-    label: <a href="https://www.antgroup.com">1st menu item</a>,
-    key: '0',
-  },
-  {
-    label: <a href="https://www.aliyun.com">2nd menu item</a>,
-    key: '1',
-  },
-  {
-    type: 'divider',
-  },
-  {
-    label: '3rd menu item',
-    key: '3',
-  },
-];
-
 function Dashboard() {
   const { Text } = Typography;
   const route = useRouter();
@@ -94,17 +75,12 @@ function Dashboard() {
           return {
             ...item,
             percentage: idx === 0 ? parseFloat(usageItems.cpu?.cpuData[0]?.Maximum).toFixed(2) :
-              idx === 2 ? `${usageItems.disk?.size} GB` :
-                item.percentage,
-
+              idx === 2 ? `${usageItems.disk?.size} GB` : item.percentage,
             average: idx === 0 ? parseFloat(result?.data?.average.toString()).toFixed(2) :
-              idx === 2 ? usageItems.disk?.size / 100 :
-                item.average,
-
+              idx === 2 ? usageItems.disk?.size / 100 : item.average,
             progressProps: {
               percent: idx === 0 ? parseFloat(usageItems.cpu?.cpuData[0]?.Maximum).toFixed(2) :
-                idx === 2 ? usageItems.disk?.size :
-                  item.progressProps.percent,
+                idx === 2 ? usageItems.disk?.size : item.progressProps.percent,
               strokeColor: item.progressProps.strokeColor,
             },
           };
@@ -270,6 +246,36 @@ function Dashboard() {
                   </Space>
                 ))}
               </Card>
+
+              {/* EC2 Instences */}
+              <Card style={{ marginBottom: 10 }} title="EC2 Instance">
+                {Object.values(
+                  (response || []).reduce<
+                    Record<
+                      string,
+                      { bucketName: string; totalSizeGB: number }
+                    >
+                  >((buckets, item) => {
+                    const { bucketName, totalSizeGB } = item;
+                    if (!buckets[bucketName]) {
+                      buckets[bucketName] = { bucketName, totalSizeGB };
+                    } else {
+                      buckets[bucketName].totalSizeGB += totalSizeGB;
+                    }
+                    return buckets;
+                  }, {})
+                ).map((bucket) => (
+                  <Space
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                    key={bucket.bucketName}
+                  >
+                    <Text strong>{bucket.bucketName}</Text>
+                    <Text type="secondary">{parseFloat(bucket.totalSizeGB.toString()).toPrecision(2)} GB</Text>
+                  </Space>
+                ))}
+              </Card>
+              {/* EC2 Instences */}
+
 
               <Card style={{ background: "linear-gradient(#8F68FD, #420ADF)" }}>
                 <Flex align="center" justify="space-between">
