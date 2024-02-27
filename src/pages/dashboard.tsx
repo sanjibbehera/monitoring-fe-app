@@ -12,7 +12,8 @@ import {
   Progress,
   Row,
   Space,
-  Typography
+  Tag,
+  Typography,
 } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -20,7 +21,11 @@ import { CSSProperties, useEffect, useState } from "react";
 import SeverIcon from "../../public/Server.svg";
 import AlertFlesh from "../../public/alertPhishing.svg";
 import ServerRequestIcon from "../../public/serverRequest.svg";
-import { dashboardData, getS3Data } from "./api/dashboard";
+import { dashboardData, getEC2InstanceData, getS3Data } from "./api/dashboard";
+
+interface EC2Data {
+  [accountId: string]: string[];
+}
 
 const divStyle: CSSProperties = { paddingInline: 15, paddingTop: 10 };
 
@@ -54,13 +59,13 @@ const data = [
   },
 ];
 
-
 function Dashboard() {
   const { Text } = Typography;
   const route = useRouter();
   const [response, setResponse] = useState([]);
   const [cardsData, setCardsData] = useState([]);
   const [extraCardData, setExtraCardData] = useState([]);
+  const [ec2, setEc2] = useState<EC2Data>({});
   useEffect(() => {
     const fetchCardItems = async () => {
       const result = await dashboardData();
@@ -74,13 +79,25 @@ function Dashboard() {
         const cardInfo = cardsList.map((item: any, idx: number) => {
           return {
             ...item,
-            percentage: idx === 0 ? parseFloat(usageItems.cpu?.cpuData[0]?.Maximum).toFixed(2) :
-              idx === 2 ? `${usageItems.disk?.size} GB` : item.percentage,
-            average: idx === 0 ? parseFloat(result?.data?.average.toString()).toFixed(2) :
-              idx === 2 ? usageItems.disk?.size / 100 : item.average,
+            percentage:
+              idx === 0
+                ? parseFloat(usageItems.cpu?.cpuData[0]?.Maximum).toFixed(2)
+                : idx === 2
+                ? `${usageItems.disk?.size} GB`
+                : item.percentage,
+            average:
+              idx === 0
+                ? parseFloat(result?.data?.average.toString()).toFixed(2)
+                : idx === 2
+                ? usageItems.disk?.size / 100
+                : item.average,
             progressProps: {
-              percent: idx === 0 ? parseFloat(usageItems.cpu?.cpuData[0]?.Maximum).toFixed(2) :
-                idx === 2 ? usageItems.disk?.size : item.progressProps.percent,
+              percent:
+                idx === 0
+                  ? parseFloat(usageItems.cpu?.cpuData[0]?.Maximum).toFixed(2)
+                  : idx === 2
+                  ? usageItems.disk?.size
+                  : item.progressProps.percent,
               strokeColor: item.progressProps.strokeColor,
             },
           };
@@ -89,6 +106,16 @@ function Dashboard() {
       }
     };
     fetchCardItems();
+
+    getEC2InstanceData()
+      .then((data) => {
+        setEc2(data.data.data);
+        console.log("fetching Ec2Instance", data.data.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
     getS3Data()
       .then((data) => {
         setResponse(data.data.data);
@@ -102,24 +129,51 @@ function Dashboard() {
     // Customize the menu items based on the card's index
     switch (index) {
       case 0:
+        const accountId = Object.keys(ec2 || {})[0];
+
         return {
           items: [
             {
-              label: <Typography.Text style={{ fontSize: 12 }} strong>CPU Details</Typography.Text>,
-              key: '0',
+              label: (
+                <Typography.Text style={{ fontSize: 12 }} strong>
+                  CPU Details
+                </Typography.Text>
+              ),
+              key: "0",
             },
             {
-              label: <Typography.Text style={{ fontSize: 12 }}>Account Id :{extraCardData?.cpu[0]?.accountId}</Typography.Text>,
-              key: '0',
-            }, {
-              label: <Typography.Text style={{ fontSize: 12 }}>Maximum :{parseFloat(extraCardData?.cpu[0]?.cpuData[index]?.Maximum).toPrecision(2)}%</Typography.Text>,
-              key: '1',
+              label: (
+                <Typography.Text style={{ fontSize: 12 }}>
+                  {/* Account Id :{extraCardData?.cpu[0]?.accountId} */}
+                  Account Id : {accountId}
+                </Typography.Text>
+              ),
+              key: "0",
             },
             {
-              label: <Typography.Text style={{ fontSize: 12 }}>Date :{new Date(extraCardData?.cpu[0]?.cpuData[index]?.Timestamp).toLocaleDateString()}</Typography.Text>,
-              key: '2',
-            }
-          ]
+              label: (
+                <Typography.Text style={{ fontSize: 12 }}>
+                  Maximum :
+                  {parseFloat(
+                    extraCardData?.cpu[0]?.cpuData[index]?.Maximum
+                  ).toPrecision(2)}
+                  %
+                </Typography.Text>
+              ),
+              key: "1",
+            },
+            {
+              label: (
+                <Typography.Text style={{ fontSize: 12 }}>
+                  Date :
+                  {new Date(
+                    extraCardData?.cpu[0]?.cpuData[index]?.Timestamp
+                  ).toLocaleDateString()}
+                </Typography.Text>
+              ),
+              key: "2",
+            },
+          ],
         };
       // case 1:
       //   return { items: [/* your data for index 1 */] };
@@ -223,10 +277,7 @@ function Dashboard() {
               <Card style={{ marginBottom: 10 }} title="S3 Buckets">
                 {Object.values(
                   (response || []).reduce<
-                    Record<
-                      string,
-                      { bucketName: string; totalSizeGB: number }
-                    >
+                    Record<string, { bucketName: string; totalSizeGB: number }>
                   >((buckets, item) => {
                     const { bucketName, totalSizeGB } = item;
                     if (!buckets[bucketName]) {
@@ -242,19 +293,19 @@ function Dashboard() {
                     key={bucket.bucketName}
                   >
                     <Text strong>{bucket.bucketName}</Text>
-                    <Text type="secondary">{parseFloat(bucket.totalSizeGB.toString()).toPrecision(2)} GB</Text>
+                    <Text type="secondary">
+                      {parseFloat(bucket.totalSizeGB.toString()).toPrecision(2)}{" "}
+                      GB
+                    </Text>
                   </Space>
                 ))}
               </Card>
 
               {/* EC2 Instences */}
-              <Card style={{ marginBottom: 10 }} title="EC2 Instance">
+              {/* <Card style={{ marginBottom: 10 }} title="EC2 Instance">
                 {Object.values(
                   (response || []).reduce<
-                    Record<
-                      string,
-                      { bucketName: string; totalSizeGB: number }
-                    >
+                    Record<string, { bucketName: string; totalSizeGB: number }>
                   >((buckets, item) => {
                     const { bucketName, totalSizeGB } = item;
                     if (!buckets[bucketName]) {
@@ -270,12 +321,36 @@ function Dashboard() {
                     key={bucket.bucketName}
                   >
                     <Text strong>{bucket.bucketName}</Text>
-                    <Text type="secondary">{parseFloat(bucket.totalSizeGB.toString()).toPrecision(2)} GB</Text>
+                    <Text type="secondary">
+                      {parseFloat(bucket.totalSizeGB.toString()).toPrecision(2)}{" "}
+                      GB
+                    </Text>
                   </Space>
                 ))}
-              </Card>
-              {/* EC2 Instences */}
+              </Card> */}
 
+              <Card style={{ marginBottom: 10 }} title="EC2 Instance">
+                {Object.entries(ec2 || {}).map(
+                  ([accountId, instanceIds], index) => (
+                    <div key={index}>
+                      <div>
+                        <Text strong>Account Id : {accountId}</Text>
+                      </div>
+
+                      <Text strong>EC2 Instances : </Text>
+                      {instanceIds.map((instance, i) => (
+                        <Space>
+                          <Tag key={i} style={{ marginRight: 8 }}>
+                            {instance.instance}
+                          </Tag>
+                        </Space>
+                      ))}
+                    </div>
+                  )
+                )}
+              </Card>
+
+              {/* EC2 Instences */}
 
               <Card style={{ background: "linear-gradient(#8F68FD, #420ADF)" }}>
                 <Flex align="center" justify="space-between">

@@ -39,3 +39,19 @@ export const getS3Data = async () => {
     return error?.response;
   }
 };
+
+export const getEC2InstanceData = async () => {
+  try {
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "multipart/form-data",
+    };
+    const data = await axios.get(`${LOCAL_BASE_URL}/users/getInstances`, {
+      headers: headers,
+    });
+    console.log("EC2 Instance", data);
+    return data;
+  } catch (error: any) {
+    return error?.response;
+  }
+};
