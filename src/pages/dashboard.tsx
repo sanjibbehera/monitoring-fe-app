@@ -22,6 +22,8 @@ import SeverIcon from "../../public/Server.svg";
 import AlertFlesh from "../../public/alertPhishing.svg";
 import ServerRequestIcon from "../../public/serverRequest.svg";
 import { dashboardData, getEC2InstanceData, getS3Data } from "./api/dashboard";
+import ServerTable from "@/components/ServerTable";
+import ServerRequestLineChart from "@/components/ServerRequestLineChart";
 
 interface EC2Data {
   [accountId: string]: string[];
@@ -223,12 +225,11 @@ function Dashboard() {
                     )
                   )}
               </Flex>
-              <Space style={{ marginTop: 10, marginBottom: 10 }}>
-                <Card title="Cardss title" bordered={false}>
-                  Card content Lorem ipsum dolor sit amet, consectetur
-                  adipisicing elit. Asperiores odio corporis temporibus
+              <div style={{ marginTop: 10, marginBottom: 10, marginLeft: 3, marginRight: 3 }}>
+                <Card title="Server Requests" bordered={false}>
+                  <ServerRequestLineChart />
                 </Card>
-              </Space>
+              </div>
             </Col>
             <Col span={8}>
               <Card style={{ marginBottom: 10 }} bordered={false}>
@@ -302,33 +303,6 @@ function Dashboard() {
               </Card>
 
               {/* EC2 Instences */}
-              {/* <Card style={{ marginBottom: 10 }} title="EC2 Instance">
-                {Object.values(
-                  (response || []).reduce<
-                    Record<string, { bucketName: string; totalSizeGB: number }>
-                  >((buckets, item) => {
-                    const { bucketName, totalSizeGB } = item;
-                    if (!buckets[bucketName]) {
-                      buckets[bucketName] = { bucketName, totalSizeGB };
-                    } else {
-                      buckets[bucketName].totalSizeGB += totalSizeGB;
-                    }
-                    return buckets;
-                  }, {})
-                ).map((bucket) => (
-                  <Space
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                    key={bucket.bucketName}
-                  >
-                    <Text strong>{bucket.bucketName}</Text>
-                    <Text type="secondary">
-                      {parseFloat(bucket.totalSizeGB.toString()).toPrecision(2)}{" "}
-                      GB
-                    </Text>
-                  </Space>
-                ))}
-              </Card> */}
-
               <Card style={{ marginBottom: 10 }} title="EC2 Instance">
                 {Object.entries(ec2 || {}).map(
                   ([accountId, instanceIds], index) => (
@@ -434,9 +408,8 @@ function Dashboard() {
         <div style={{ ...divStyle, marginBottom: 10 }}>
           <Row wrap gutter={16}>
             <Col span={24}>
-              <Card title="Cassrd title" bordered={false}>
-                Card content Lorem ipsum dolor sit amet, consectetur adipisicing
-                elit. Asperiores odio corporis temporibus
+              <Card title="Inactive Servers" bordered={false}>
+                <ServerTable />
               </Card>
             </Col>
           </Row>
