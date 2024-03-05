@@ -1,5 +1,6 @@
-import { LOCAL_BASE_URL } from "@/utils/global.config";
 import axios from "axios";
+
+const LOCAL_BASE_URL = process.env.REACT_APP_LOCAL_BASE_URL;
 
 // http://localhost:8000/v1/users/getEC2Details
 // http://localhost:8000/v1/users/getEc2StorageUtilization/767397878280
